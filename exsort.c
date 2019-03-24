@@ -331,5 +331,53 @@ void Ex_sort(char *path, int rsize, int ksize, int nthreads)
 }
 
 int main(int argc, char** argv) {
+    int opt;
+    int char_start = 0;
+    int char_stop = 255;
+    int record_size=100;
+    int key_size=10;
+    int stack_size=5;
+    int cut_off = 4;
+    int switch_to_shell = 20;
+    int verbosity = 0;
+    int nthreads = 1;
+    while ((opt = getopt(argc, argv, "var:k:s:c:t:w:")) != -1) {
+        switch (opt) {
+        case 'v':
+            verbosity += 1;
+            break;
+        case 'a':
+            char_start = 32;
+            char_stop = 128;
+            break;
+        case 'r':
+            record_size = atoi(optarg);
+            break;
+        case 'k':
+            key_size = atoi(optarg);
+            break;
+        case 's':
+            stack_size = atoi(optarg);
+            break;
+        case 'w':
+            switch_to_shell = atoi(optarg);
+            break;
+        case 't':
+            nthreads = atoi(optarg);
+            break;
+        case 'c':
+            cut_off = atoi(optarg);
+            break;
+        default:
+            fprintf(stderr, "Invalid parameter: -%c\n", opt);
+            return 1;
+            break;
+        }
+    }
+
+    while(optind < argc) {
+        Ex_sort(argv[optind++], record_size, key_size, nthreads);
+    }
+
     return 0;
 }
